@@ -24,6 +24,6 @@ Hey I just met you
 
 and this is crazy
 
-(but here's my peer creds)[https://github.com/hyperboria/peers/blob/master/NA/us/pennsylvania/nat.usa.k]
+[but here's my peer creds](https://github.com/hyperboria/peers/blob/master/NA/us/pennsylvania/nat.usa.k)
 
 mesh with me maybe
