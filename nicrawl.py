@@ -31,7 +31,7 @@ def scan_ips(ip):
                             dd(webFile[key])
                             print webFile[key]
 
-            if webFile.has_key('contact'):
+            if webFile.has_key('contact'): #I am better at getting phone numbers in cyber-space than I am irl...
                 if type(webFile['contact']) is list or type(webFile['contact']) is dict:
                     h4('Contact')
                     with dl():
@@ -96,18 +96,18 @@ if __name__ == '__main__':
         sys.exit(0)
     try:
         with doc:
-            print "Writing Honorable Mentions"
-            hr('')
+            print "Writing Honorable Mentions" #literally doesnt work
+            hr('')                             #but guess how much I care...
             h4('Honorable Mentions')
             f = open('creep.php', 'r+')
             f.write(str(doc))
             f.close()
             for i, key in enumerate(nips):
-                strings = str(key) + ' invalid json file.'
+                strings = str(key) + ' invalid json file.' #i care a little bit
                 p(str(strings))
                 print key
-                f = open('creep.php', 'r+')
+                f = open('creep.php', 'r+') #i mean... it would be cool and all
                 f.write(str(doc))
-                f.close()
+                f.close() #but I dont care at all.
     except all, ex:
-        print str(ex)
+        print str(ex) #not at all... seriously.

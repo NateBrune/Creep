@@ -37,6 +37,12 @@ def tRun():
             if ret.code == 200:
                 print "%s/nodeinfo.json Exists!" % (ip)
                 resultList.append('%s' % (ip))
+                try:
+                    f = open('nis.log', 'a+')
+                    f.write(str(ip) + "\n")
+                    f.close()
+                except all, ex:
+                    print str(ex)
                 pass
             else:
                 #print "%s/nodeinfo.json 404" % (ip)
@@ -60,7 +66,7 @@ if __name__ == '__main__':
       print 'Final result list'
       for x in resultList:
          print x
-      print "Number of open resolvers: %s" %(len(resultList))
+      print "Number of nodeinfos: %s" %(len(resultList))
 
     except KeyboardInterrupt, ex:
         pass
