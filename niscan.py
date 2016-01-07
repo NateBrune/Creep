@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-import os
-import sys
 try:
     import queue
 except ImportError:
@@ -14,19 +12,20 @@ numthreads = 150
 resultList = []
 wq = queue.Queue()
 
+
 # Thread Launcher
-def launchThreads(argsfile,numthreads):
-    global wq
+def launchThreads(numthreads):
     # Enqueing Stuff
     with open(args.file, "r") as ipsfile:
-      for ip in ipsfile:
-        wq.put(ip)
+        for ip in ipsfile:
+            wq.put(ip)
     # Spawning Threads
     for i in range(numthreads):
         t = threading.Thread(target=tRun)
         t.start()
     while threading.active_count() > 1:
         time.sleep(0.1)
+
 
 # Thread
 def tRun():
@@ -57,19 +56,19 @@ def tRun():
 if __name__ == '__main__':
     # Process command line options
     import argparse
-    parser = argparse.ArgumentParser(description = 'Scan IPv6 file for nodeinfo.json files')
-    parser.add_argument('file', type = str, help = 'list of ip addresses')
+    parser = argparse.ArgumentParser(description='Scan IPv6 file for nodeinfo.json files')
+    parser.add_argument('file', type=str, help='list of ip addresses')
     args = parser.parse_args()
 
     # Run scans, die properly on CTRL-C
     try:
-      launchThreads(args.file,numthreads)
+        launchThreads(numthreads)
 
-      # Print results
-      print('Final result list')
-      for x in resultList:
-         print(x)
-      print("Number of nodeinfos: %s" %(len(resultList)))
+        # Print results
+        print('Final result list')
+        for x in resultList:
+            print(x)
+        print("Number of nodeinfos: %s" % (len(resultList)))
 
     except KeyboardInterrupt as ex:
         pass
