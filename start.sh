@@ -3,6 +3,6 @@
 rm hia.iplist.*
 rm hia-iplist.log
 touch nis.log
-python2 niscan.py hia.iplist
+python niscan.py hia.iplist
 touch creep.php
-python2 nicrawl.py nis.log
+python nicrawl.py nis.log

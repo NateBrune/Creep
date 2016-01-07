@@ -1,15 +1,18 @@
 #!/usr/bin/env python
 import os
 import sys
-import Queue
+try:
+    import queue
+except ImportError:
+    import Queue as queue
 import time
 import threading
-import urllib2
+import requests
 
 # Various settings
 numthreads = 150
 resultList = []
-wq = Queue.Queue()
+wq = queue.Queue()
 
 # Thread Launcher
 def launchThreads(argsfile,numthreads):
@@ -33,16 +36,16 @@ def tRun():
         ip = wq.get().rstrip()
         #print str(ip)
         try:
-            ret = urllib2.urlopen('http://['+str(ip)+']/nodeinfo.json')
-            if ret.code == 200:
-                print "%s/nodeinfo.json Exists!" % (ip)
+            ret = requests.get('http://['+str(ip)+']/nodeinfo.json', allow_redirects=False)
+            if ret.status_code == 200:
+                print("%s/nodeinfo.json Exists!" % (ip))
                 resultList.append('%s' % (ip))
                 try:
                     f = open('nis.log', 'a+')
                     f.write(str(ip) + "\n")
                     f.close()
-                except all, ex:
-                    print str(ex)
+                except all as ex:
+                    print(str(ex))
                 pass
             else:
                 #print "%s/nodeinfo.json 404" % (ip)
@@ -63,10 +66,10 @@ if __name__ == '__main__':
       launchThreads(args.file,numthreads)
 
       # Print results
-      print 'Final result list'
+      print('Final result list')
       for x in resultList:
-         print x
-      print "Number of nodeinfos: %s" %(len(resultList))
+         print(x)
+      print("Number of nodeinfos: %s" %(len(resultList)))
 
-    except KeyboardInterrupt, ex:
+    except KeyboardInterrupt as ex:
         pass

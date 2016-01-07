@@ -1,15 +1,15 @@
-import urllib2
+import requests
 import sys
 import json
 import socket
-import httplib
 import re
+
 try:
     import dominate
     from dominate.tags import *
 except:
-    print 'dominate is required'
-    print 'https://github.com/Knio/dominate'
+    print('dominate is required')
+    print('https://github.com/Knio/dominate')
     sys.exit(0)
 
 doc = dominate.document(title='creep')
@@ -17,7 +17,7 @@ nips = []
 
 def scan_ips(ip):
     try:
-        webFile = json.load(urllib2.urlopen('http://['+ip.rstrip()+']/nodeinfo.json', timeout=3))
+        webFile = requests.get('http://['+ip.rstrip()+']/nodeinfo.json', timeout=3).json()
         with doc:
             a('http://['+ip.rstrip()+']/nodeinfo.json', href='http://['+ip.rstrip()+']/nodeinfo.json')
             h4('Node')
@@ -29,7 +29,7 @@ def scan_ips(ip):
                         if str(key) != "ip":
                             dt(str(key))
                             dd(webFile[key])
-                            print webFile[key]
+                            print(webFile[key])
 
             if webFile.has_key('contact'): #I am better at getting phone numbers in cyber-space than I am irl...
                 if type(webFile['contact']) is list or type(webFile['contact']) is dict:
@@ -38,7 +38,7 @@ def scan_ips(ip):
                         for key in webFile['contact']:
                             dt(str(key))
                             dd(webFile['contact'][key])
-                            print webFile['contact'][key]
+                            print(webFile['contact'][key])
             if webFile.has_key('services'):
                 try:
                     if type(webFile['services']) is list or type(webFile['services']) is dict:
@@ -54,23 +54,23 @@ def scan_ips(ip):
         f = open('creep.php', 'r+')
         f.write(str(doc))
         f.close()
-    except urllib2.URLError, ex:
-        print str(ip.rstrip()) + " connection timed out"
+    except requests.exceptions.Timeout as ex:
+        print(str(ip.rstrip()) + " connection timed out")
         pass
-    except socket.timeout, ex:
-        print str(ip.rstrip()) + " connection timed out"
+    except socket.timeout as ex:
+        print(str(ip.rstrip()) + " connection timed out")
         pass
-    except ValueError, ex:
-        print str(ip.rstrip()) + " does not have a valid nodeinfo.json"
+    except ValueError as ex:
+        print(str(ip.rstrip()) + " does not have a valid nodeinfo.json")
         nips.append(ip.rstrip())
         pass
-    except AttributeError, ex:
-        print str(ip.rstrip()) + " AttributeError"
+    except AttributeError as ex:
+        print(str(ip.rstrip()) + " AttributeError")
         pass
-    except httplib.BadStatusLine, ex:
-        print str(ip.rstrip()) + " Bad Status"
+    except requests.exceptions.RequestException as ex:
+        print("A requests exception occured! %s" % ex)
         pass
-    except all, ex:
+    except all as ex:
             pass
 
 if __name__ == '__main__':
@@ -92,11 +92,11 @@ if __name__ == '__main__':
         with open(args.file, "r") as ipsfile:
             for ips in ipsfile:
                 scan_ips(ips)
-    except KeyboardInterrupt, ex:
+    except KeyboardInterrupt as ex:
         sys.exit(0)
     try:
         with doc:
-            print "Writing Honorable Mentions" #literally doesnt work
+            print("Writing Honorable Mentions") #literally doesnt work
             hr('')                             #but guess how much I care...
             h4('Honorable Mentions')
             f = open('creep.php', 'r+')
@@ -105,9 +105,9 @@ if __name__ == '__main__':
             for i, key in enumerate(nips):
                 strings = str(key) + ' invalid json file.' #i care a little bit
                 p(str(strings))
-                print key
+                print(key)
                 f = open('creep.php', 'r+') #i mean... it would be cool and all
                 f.write(str(doc))
                 f.close() #but I dont care at all.
-    except all, ex:
-        print str(ex) #not at all... seriously.
+    except all as ex:
+        print(str(ex)) #not at all... seriously.
