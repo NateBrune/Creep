@@ -26,7 +26,6 @@ def scan_ips(ip):
 if __name__ == '__main__':
     # Process command line options
     import argparse
-    import json
     parser = argparse.ArgumentParser(description='Crawl nodeinfo files')
     parser.add_argument('file', type=str, help='list of ip addresses')
     args = parser.parse_args()
