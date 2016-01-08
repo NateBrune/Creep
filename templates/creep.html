@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>{{ title }}</title>
+  </head>
+  <body>
+    <h1>{{ title }}</h1>
+    {% for node in nodes %}
+      <div class="node">
+        <h2>{{ node.hostname }}</h2>
+        <table>
+          <tr><td>IP</td><td>{{ node.ip }}</td></tr>
+          {% if "hostname" in node %}<tr><td>hostname</td><td>{{ node.hostname }}</td></tr>{% endif %}
+          <tr><td>key</td><td>{{ node.key }}</td></tr>
+        </table>
+        {% if "services" in node %}
+        <ul>
+          {% for service in node.services %}
+          <li><a href="{{ service.uri }}">{{ service.name }}</a>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </body>
+</html>
