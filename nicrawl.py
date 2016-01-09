@@ -1,5 +1,4 @@
 import requests
-import sys
 import socket
 from jinja2 import Environment, FileSystemLoader
 
@@ -7,7 +6,7 @@ env = Environment(loader=FileSystemLoader('templates'))
 nips = []
 
 
-def scan_ips(ip):
+def scan_ip(ip):
     try:
         return requests.get('http://['+ip.rstrip()+']/nodeinfo.json', timeout=3).json()
     except requests.exceptions.Timeout as ex:
@@ -27,15 +26,19 @@ if __name__ == '__main__':
     # Process command line options
     import argparse
     parser = argparse.ArgumentParser(description='Crawl nodeinfo files')
+    parser.add_argument('--out', type=str, help='The file to output the HTML to',
+                        default='creep.php')
+    parser.add_argument('--static', type=str,
+                        help="Prefix for all static resources referenced from the output file",
+                        default='static')
     parser.add_argument('file', type=str, help='list of ip addresses')
     args = parser.parse_args()
     template = env.get_template('creep.html')
     nodes = []
     with open(args.file, "r") as ipsfile:
-        for ips in ipsfile:
-            node = scan_ips(ips)
+        for ip in ipsfile:
+            node = scan_ip(ip)
             if node is not None:
                 nodes.append(node)
-    # print(json.dumps(nodes))
-    with open('creep.php', 'w') as output:
-        output.write(template.render(title='Creep', nodes=nodes))
+    with open(args.out, 'w') as output:
+        output.write(template.render(title='Creep', nodes=nodes, static=args.static))
