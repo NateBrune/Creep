@@ -4,17 +4,36 @@
     <link rel="stylesheet" href="{{ static }}/vendor/semantic-ui/components/card.min.css" />
     <link rel="stylesheet" href="{{ static }}/vendor/semantic-ui/components/list.min.css" />
     <link rel="stylesheet" href="{{ static }}/vendor/semantic-ui/components/grid.min.css" />
+    <link rel="stylesheet" href="{{ static }}/vendor/semantic-ui/components/container.min.css" />
   </head>
   <body>
-    <h1>{{ title }}</h1>
-    <div class="ui grid container">
+  <div class="ui divider">
+    <center>
+      <div class="ui text container">
+        <div class="ui dividing header">Creep</div>
+        <h5 class="first">by finn and nat</h5>
+        <p>
+          Rendering of nodeinfo.json data.
+          nodeinfo.json is an identification convention for cjdns nodes to provide info about themselves. This page aggregates nodeinfo.json data found online, to help you discover services on Hyperboria and see who operates them.
+          <a href='http://cel.on.hyperboria.name/nodesinfo/'>see also</a>
+        </p>
+      </div>
+    </center>
+  </div>
+  <br />
+  <div class="ui centered grid" align=center>
     {% for node in nodes %}
-      <div class="four wide column">
+      <div class="four wide centered column">
+        <center>
         <div class="ui fluid card">
           <div class="content">
             <p class="header">{{ node.hostname }}</p>
             <div class="meta">
-              <span>{{ node.ip }}</span>
+              {% if "name" in node.contact %}
+              <span>~[ {{ node.contact.name }} ]~</span>
+              <br />
+              {% endif %}
+              <span>{{ node.appendedip }}</span>
             </div>
             {% if "services" in node %}
             <div class="extra content">
@@ -23,7 +42,7 @@
                 <div class="item">
                   <div class="content">
                     <a class="header" href="{{ service.uri }}">{{ service.name }}</a>
-                    <div class="description">{{ service.uri }}</div>
+                    <div class="description">{{ service.description }}</div>
                   </div>
                 </div>
                 {% endfor %}
@@ -32,6 +51,7 @@
             {% endif %}
           </div>
         </div>
+        </center>
       </div>
     {% endfor %}
     </div>

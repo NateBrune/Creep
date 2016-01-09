@@ -6,9 +6,10 @@ except ImportError:
 import time
 import threading
 import requests
+import sys
 
 # Various settings
-numthreads = 150
+numthreads = 300
 resultList = []
 wq = queue.Queue()
 
@@ -35,10 +36,9 @@ def tRun():
         ip = wq.get().rstrip()
         #print str(ip)
         try:
-            ret = requests.get('http://['+str(ip)+']/nodeinfo.json', allow_redirects=False)
+            ret = requests.get('http://['+str(ip)+']/nodeinfo.json', allow_redirects=False, timeout=2)
             if ret.status_code == 200:
                 print("%s/nodeinfo.json Exists!" % (ip))
-                resultList.append('%s' % (ip))
                 try:
                     f = open('nis.log', 'a+')
                     f.write(str(ip) + "\n")
@@ -47,11 +47,10 @@ def tRun():
                     print(str(ex))
                 pass
             else:
-                #print "%s/nodeinfo.json 404" % (ip)
                 pass
         except:
-            #print "%s/nodeinfo.json 404" % (ip)
             pass
+    return
 
 if __name__ == '__main__':
     # Process command line options
@@ -63,12 +62,5 @@ if __name__ == '__main__':
     # Run scans, die properly on CTRL-C
     try:
         launchThreads(numthreads)
-
-        # Print results
-        print('Final result list')
-        for x in resultList:
-            print(x)
-        print("Number of nodeinfos: %s" % (len(resultList)))
-
     except KeyboardInterrupt as ex:
-        pass
+        sys.exit(0)
