@@ -3,13 +3,16 @@ import socket
 from jinja2 import Environment, FileSystemLoader
 import json
 
+USER_AGENT = "NAT's Creep nodeinfo.json scanner +https://github.com/NateBrune/Creep"
+
 env = Environment(loader=FileSystemLoader('templates'))
 nips = []
 
 
 def scan_ip(ip):
     try:
-        ni = requests.get('http://['+ip.rstrip()+']/nodeinfo.json', timeout=3).json()
+        ni = requests.get('http://['+ip.rstrip()+']/nodeinfo.json', timeout=3,
+                          headers={'User-Agent': USER_AGENT}).json()
         ni.update({'appendedip':ip.rstrip()})
         return ni
     except requests.exceptions.Timeout as ex:
