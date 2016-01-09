@@ -36,7 +36,7 @@ if __name__ == '__main__':
                         default='static')
     parser.add_argument('file', type=str, help='list of ip addresses')
     args = parser.parse_args()
-    template = env.get_template('creep.template')
+    template = env.get_template('creep.html')
     nodes = []
     with open(args.file, "r") as ipsfile:
         for ip in ipsfile:
