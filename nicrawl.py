@@ -1,6 +1,7 @@
 import requests
 import socket
 from jinja2 import Environment, FileSystemLoader
+import json
 
 env = Environment(loader=FileSystemLoader('templates'))
 nips = []
@@ -39,6 +40,8 @@ if __name__ == '__main__':
         for ip in ipsfile:
             node = scan_ip(ip)
             if node is not None:
-                nodes.append(node)
+                if 'services' in node:
+                    if type(node['services']) is list or type(node['services']) is dict:
+                        nodes.append(node)
     with open(args.out, 'w') as output:
         output.write(template.render(title='Creep', nodes=nodes, static=args.static))
