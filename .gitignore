@@ -1,3 +1,6 @@
+## External components for the output
+static/vendor
+
 ## HIA list
 hia.iplist*
 

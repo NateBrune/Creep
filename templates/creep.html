@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ static }}/vendor/semantic-ui/components/card.min.css" />
+    <link rel="stylesheet" href="{{ static }}/vendor/semantic-ui/components/list.min.css" />
+    <link rel="stylesheet" href="{{ static }}/vendor/semantic-ui/components/grid.min.css" />
+  </head>
+  <body>
+    <h1>{{ title }}</h1>
+    <div class="ui grid container">
+    {% for node in nodes %}
+      <div class="four wide column">
+        <div class="ui fluid card">
+          <div class="content">
+            <p class="header">{{ node.hostname }}</p>
+            <div class="meta">
+              <span>{{ node.ip }}</span>
+            </div>
+            {% if "services" in node %}
+            <div class="extra content">
+              <div class="ui relaxed divided list">
+                {% for service in node.services %}
+                <div class="item">
+                  <div class="content">
+                    <a class="header" href="{{ service.uri }}">{{ service.name }}</a>
+                    <div class="description">{{ service.uri }}</div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+  </body>
+</html>
