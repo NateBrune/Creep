@@ -8,6 +8,8 @@ import threading
 import requests
 import sys
 
+USER_AGENT = "NAT's Creep nodeinfo.json scanner +https://github.com/NateBrune/Creep"
+
 # Various settings
 numthreads = 300
 resultList = []
@@ -36,7 +38,8 @@ def tRun():
         ip = wq.get().rstrip()
         #print str(ip)
         try:
-            ret = requests.get('http://['+str(ip)+']/nodeinfo.json', allow_redirects=False, timeout=2)
+            ret = requests.get('http://['+str(ip)+']/nodeinfo.json', allow_redirects=False,
+                               timeout=2, headers={'User-Agent': USER_AGENT})
             if ret.status_code == 200:
                 print("%s/nodeinfo.json Exists!" % (ip))
                 try:
