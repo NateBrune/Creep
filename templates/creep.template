@@ -13,8 +13,8 @@
         <div class="ui dividing header">Creep</div>
         <h5 class="first">by finn and nat</h5>
         <p>
-          Rendering of nodeinfo.json data.
-          nodeinfo.json is an identification convention for cjdns nodes to provide info about themselves. This page aggregates nodeinfo.json data found online, to help you discover services on Hyperboria and see who operates them.
+          Rendering of nodeinfo.json data. <br />
+          nodeinfo.json is an identification convention for cjdns nodes to provide info about themselves. This page aggregates nodeinfo.json data found online, to help you discover services on Hyperboria and see who operates them. <br />
           <a href='http://cel.on.hyperboria.name/nodesinfo/'>see also</a>
         </p>
       </div>
