@@ -12,12 +12,12 @@ nips = []
 def scan_ip(ip, favicon_path):
     headers = {
         'User-Agent': USER_AGENT,
-        'Host': "[%s]" % ip
+        'Host': "[%s]" % ip.rstrip()
     }
     try:
         url = "http://[%s]/nodeinfo.json" % ip.rstrip()
         print("Requesting %s" % url)
-        ni = requests.get(url, timeout=3, headers=headers, allow_redirects=False).json()
+        ni = requests.get(str(url).rstrip(), timeout=10, headers=headers, allow_redirects=False).json()
         ni.update({'appendedip': ip.rstrip()})
         return ni
     except requests.exceptions.Timeout as ex:
