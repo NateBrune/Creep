@@ -1,7 +1,7 @@
 import requests
 import socket
 from jinja2 import Environment, FileSystemLoader
-import json
+import os
 
 USER_AGENT = "NAT's Creep nodeinfo.json scanner +https://github.com/NateBrune/Creep"
 
@@ -9,11 +9,16 @@ env = Environment(loader=FileSystemLoader('templates'))
 nips = []
 
 
-def scan_ip(ip):
+def scan_ip(ip, favicon_path):
+    headers = {
+        'User-Agent': USER_AGENT,
+        'Host': "[%s]" % ip
+    }
     try:
-        ni = requests.get('http://['+ip.rstrip()+']/nodeinfo.json', timeout=3,
-                          headers={'User-Agent': USER_AGENT}).json()
-        ni.update({'appendedip':ip.rstrip()})
+        url = "http://[%s]/nodeinfo.json" % ip.rstrip()
+        print("Requesting %s" % url)
+        ni = requests.get(url, timeout=3, headers=headers, allow_redirects=False).json()
+        ni.update({'appendedip': ip.rstrip()})
         return ni
     except requests.exceptions.Timeout as ex:
         print(str(ip.rstrip()) + " connection timed out")
@@ -37,14 +42,18 @@ if __name__ == '__main__':
     parser.add_argument('--static', type=str,
                         help="Prefix for all static resources referenced from the output file",
                         default='static')
+    parser.add_argument('--favicons', type=str, help='Folder to store favicons in.',
+                        default='static/favicon')
     parser.add_argument('file', type=str, help='list of ip addresses')
     args = parser.parse_args()
+    if not os.path.isdir(args.favicons):
+        os.makedirs(args.favicons)
     template = env.get_template('creep.html')
     nodes = []
     with open(args.file, "r") as ipsfile:
         for ip in ipsfile:
             added = False
-            node = scan_ip(ip)
+            node = scan_ip(ip, args.favicons)
             if node is not None:
                 if 'contact' in node:
                     if 'name' in node['contact']:
