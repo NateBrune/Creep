@@ -10,7 +10,7 @@ env = Environment(loader=FileSystemLoader('templates'))
 nips = []
 
 
-def scan_ip(ip, favicon_path, logger):
+def scan_ip(ip, logger):
     headers = {
         'User-Agent': USER_AGENT,
         'Host': "[%s]" % ip
@@ -45,8 +45,6 @@ if __name__ == '__main__':
     parser.add_argument('--static', type=str,
                         help="Prefix for all static resources referenced from the output file",
                         default='static')
-    parser.add_argument('--favicons', type=str, help='Folder to store favicons in.',
-                        default='static/favicon')
     parser.add_argument("-v", "--verbose", help="increase output verbosity",
                         action="store_true")
     parser.add_argument('file', type=str, help='list of ip addresses')
@@ -55,15 +53,12 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)-15s %(ip)s %(message)s')
     if args.verbose:
         logger.setLevel(level=logging.DEBUG)
-    if not os.path.isdir(args.favicons):
-        logger.info("Creating %s to store favicons", args.favicons)
-        os.makedirs(args.favicons)
     template = env.get_template('creep.html')
     nodes = []
     with open(args.file, "r") as ipsfile:
         for ip in ipsfile:
             added = False
-            node = scan_ip(ip.rstrip(), args.favicons, logger)
+            node = scan_ip(ip.rstrip(), logger)
             if node is not None:
                 if 'contact' in node:
                     if 'name' in node['contact']:
