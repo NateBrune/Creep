@@ -12,23 +12,23 @@ nips = []
 def scan_ip(ip, favicon_path):
     headers = {
         'User-Agent': USER_AGENT,
-        'Host': "[%s]" % ip.rstrip()
+        'Host': "[%s]" % ip
     }
     try:
-        url = "http://[%s]/nodeinfo.json" % ip.rstrip()
+        url = "http://[%s]/nodeinfo.json" % ip
         print("Requesting %s" % url)
-        ni = requests.get(str(url).rstrip(), timeout=10, headers=headers, allow_redirects=False).json()
-        ni.update({'appendedip': ip.rstrip()})
+        ni = requests.get(str(url), timeout=10, headers=headers, allow_redirects=False).json()
+        ni.update({'appendedip': ip})
         return ni
     except requests.exceptions.Timeout as ex:
-        print(str(ip.rstrip()) + " connection timed out")
+        print(str(ip) + " connection timed out")
     except socket.timeout as ex:
-        print(str(ip.rstrip()) + " connection timed out")
+        print(str(ip) + " connection timed out")
     except ValueError as ex:
-        print(str(ip.rstrip()) + " does not have a valid nodeinfo.json")
-        nips.append(ip.rstrip())
+        print(str(ip) + " does not have a valid nodeinfo.json")
+        nips.append(ip)
     except AttributeError as ex:
-        print(str(ip.rstrip()) + " AttributeError")
+        print(str(ip) + " AttributeError")
     except requests.exceptions.RequestException as ex:
         print("A requests exception occured! %s" % ex)
 
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     with open(args.file, "r") as ipsfile:
         for ip in ipsfile:
             added = False
-            node = scan_ip(ip, args.favicons)
+            node = scan_ip(ip.rstrip(), args.favicons)
             if node is not None:
                 if 'contact' in node:
                     if 'name' in node['contact']:
